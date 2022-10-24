@@ -1,0 +1,139 @@
+EdiTribe should work on anything that can run Java 1.8+. It wants Nimbus for its LAF, but will fall back to the system LAF if, for some reason, Nimbus is missing.
+
+!!!IMPORTANT!!!
+===============
+-Work only on copies of your .all file and sample files.
+-Do not work on the SD Card directly. Copy any files to your internal hard drive first.
+-Rename the files on the SD Card or tuck them into a folder before copying back your worked on files.
+-Always use the Save button to save your work before exiting EdiTribe. There is no automatic save mechanism.
+
+A quick rundown on all the features:
+====================================
+Please note that all samples should be only 16-bit wide. While the Electribe will import 24-bit samples, they are apparently converted to 16-bit during the process.  Resampling only records in 16-bit as well.  You should pre-convert your samples for width and sample rate.
+
+Drag and Drop = EdiTribe is ALL drag and drop operation.  To open a .all file, drag it over onto the main table and drop it. To add WAV files, drag 1 or more files to be added automatically. When you drop, the category will be set to whatever is showing in the combo box at the bottom left.  The first WAV will go into the row your mouse pointer is over. Each additional WAV will be added to the following lines, _overwriting_ any WAVs already there.  WAVs will be sorted alphabetically as long as they are all from the same location. Any non-WAV or 24-bit WAV files, folders (and contents), or WAVs unable to be added as row 999 has been reached will be ignored.  If the file contains any Korg metadata, it will be imported as well (loop info, slice info). If the file is a looped sample, EdiTribe will do its best to find the markers and save this information.
+
+You can move samples about in the table by dragging and dropping them.  The source row and target row will be _swapped_. 
+
+Top Controls:
+=============
+Save = You MUST save your work before exiting, or it will be lost.  Click here to Save.
+
+Total Samples = you can load up to 902 samples, replacing the factory ones. Unfortunately, the usage of slots 1 to 500 are hardcoded into the firmware and while the slots from 422 to 500 may be loaded, the Electribe will not find the sample data, at least not in any fashion I have found. So, these lines are skipped and are not loadable. 
+
+Seconds left = This is calculated based on the largest file allowed. If you open the standard Korg e2sSample.all, it will say only 94.71s available. The problem with calculating the time is that each WAV you load also takes 1232 bytes extra for header and metadata. Thus, the empty e2sSample.all from Korg that you can download with no WAVs loaded will show 273.01s available. If you load all 902 samples, you will get a maximum of 261.45s.  While Korg's 270s estimate is possible, it's a tad bit optimistic at a maximum of 235 allowable samples. Finally, if you add a sample that is too large for the remaining time, calculated purely on file size, everything will go red to let you know.
+
+Memory left = The actual memory left in bytes for importing WAVs. Korg WAVs will be exact in their size. Non-Korg waves will have Korg metadata added and any other metadata chunks will be removed.
+
+Find = a very simple find function. Type in a few letters and the selected row in the table will jump to the first row where the sample name contains that string. Hitting enter will take you to the next occurrence. Clearing the field will return you to the top row.
+
+Quit = close the program gracefully. It will ask you if you want to Save.  If you just X out of the window, you will lose any unsaved changes.
+
+Table:
+======
+"#" = is the sample number used by your Electribe to identify your samples.
+
+Sample Name = the name as it shows on your e2s screen. This can be edited. No attempt is made to prevent illegal characters. Keep your names simple.
+
+Category = the category the sample belongs to. This can be edited.  While Analog and Audio In are included, and may be selected, the Osc Edit knob still treats these samples as samples, changing start points and reverse rather than using that analog magic on them.  Double click one of these to change it to the category listed in the dropdown at the bottom left.
+
+Start = the offset into the sample where the Electribe starts playing it. This value is set to zero for imported waves and is usually zero for Korg waves unless you edit the waveform on the Electribe.
+
+Length = the size of the sample itself, without the header and Korg chunks.
+
+Loop Start = first byte of the loop. This can be edited.
+
+Loop End = last byte of the loop. This can't be larger than the sample length - 2 (or - 4 for stereo).  This can be edited.
+
+Lp = Loop status. 0 = Looped, 1 = 1-Shot. Use the Loop button to switch.
+
+St = Indicates the number of channels, 0 = Mono, 1 = Stereo.  
+
+Ld = Loudness. 0 = 0dB, 1 = +12dB. This can be edited.
+
+Bitrate = This can be edited. It will just change the tuning of your wave.
+
+Tn = Tuning, from -63 to 63. This can be edited.
+
+Double-click on fields to edit them. 
+
+Bottom Controls:
+================
+Play = Audition the sample in the currently selected row.  Because Java audio support is abysmal, it may glitch and kill the audio, forcing you to restart the program. If the bitrate is higher than 48K, the sample will be played at the lower 48k rate and pitch due to a limitation in Java being unable to handle higher rates. Some noise may occur at the beginning or the end as some samples may not be fully trimmed. EdiTribe does not read all of this data and just happily plays from end to end. 
+
+Category Dropdown = This sets the chosen category for dropped WAV files. If you double-click on a category box for a particular sample above, it will be changed to this.
+
+Delete All = Will delete ALL the samples. It will ask if you are sure. This button is also faintly red to hint at the danger.
+
+Delete = Delete the sample in the selected row. The selected row will then drop down by one row if you need to delete more.
+
+Export Sample = save the selected sample as a WAV file in the same working directory.  Preserves any Korg metadata if it's there.
+
+Export All = save all the samples. Be sure EdiTribe is running from the folder where you want these files to go!  All filenames are prefaced by their Oscillator number since many Korg samples share the same name.  On reimport, the number should be dropped again.
+
+Loop/Unloop = change the loop status of the selected sample. Because this changes the Loop Start setting, it should be clicked first if it needs to be set other than 0.
+
+Convert... = Opens up a small window which allows you to batch convert samples.
+
+Merge... = Opens a new window which allows you to create a strip of waves up to 64 samples long. 
+
+Convert Window:
+===============
+This will convert a folder of .WAVs to a Korg-friendly format. 
+
+Set Source Folder = Click this button to choose the folder you wish to convert. The process will create  a new folder next to it with "-converted" added to the name where the converted files will be saved in an otherwise identical file structure.  
+
+Sample Rate = Select the Sample Rate you desire for the end product. The most common settings are available. EdiTribe uses basic linear interpolation, just like many samplers of yore did.
+
+Average L & R Channels? = Normally, the Right channel is thrown away. If you wish the Right and Left channels to be averaged instead, check this box.
+
+Trim Silence from Beginning, Trim Silence from End = To strip silence from either end of your samples, change the dB setting from minus-infinity to set the tolerance levels. If minus-infinity is selected, no trimming will occur.
+
+Begin With Zero Crossing?, End With Zero Crossing? = Walks the trim back to the nearest zero sample or zero crossing. Files will be a bit larger, but may sound better.
+
+All samples will be:
+= merged to mono;
+= normalized;
+= have any DC removed;
+= trimmed on both ends; 
+= converted to the desired Sample Rate;
+= set to 16-bit depth; 
+all in that order.
+
+EdiTribe will attempt to save any loop information in the Korg format. Other unnecessary tags and chunks will be removed.
+
+While the conversion process isn't the most efficient in the world, EdiTribe chews through samples rather quickly.  With good settings, samples can be whittled down to a fraction their original size.
+
+Merge Window:
+=============
+You can string together any number of samples up to 64 into a Sample Strip.  All samples must be mono as the Electribe will not work with chopped stereo.  The sample rates may be different, but then your samples may not be pitched correctly. The sample rate from the _last_ listed file is used to create the merged sample, but may be edited in the main table. Drag your files in from anywhere and when you click Insert..., give the new sample a name and your new strip will be saved into the selected row in the main window. You may change the selected row at any time before inserting if you have forgotten as it will automatically _overwrite_ what is there.  Sample Strips may be exported from the main table after they have been Inserted.
+
+Drag and drop sample files onto the table to add them. The first will be placed into the row the mouse pointer is over and each valid file will _replace_ each following row. You can reorder samples here by dragging and dropping rows. The source and target rows will be swapped.
+
+Insert Button = Click here to create your sample strip and insert it into the selected row on the main table.  Give it the name you want to see when you call it up on your Electribe.  All the chopping will have already been done for you!  Please note that your audio strip will only be made from the samples in row 1 on down until the _first blank row_. Any samples listed below that row are not included.
+
+Total Samples = The number of samples loaded from row 1 to the first empty row. Any samples listed below the blank row are not included.
+
+Individual Size = How much memory the samples will take if loaded individually.
+
+Combined size = How much memory the sample strip will take, based on the Equal Slices checkbox. 
+
+Close Button = dismiss the Merge window. The merge window will keep any data you put in here until you clear it, or you shut down EdiTribe.
+
+The table = 64 slots keeping a list of files and the sizes of their sample blocks.
+
+Play = Audition the sample in the currently selected row. All other caveats mentioned above still apply.
+
+Equal Slices = Chooses the largest sample and makes each slice this same size. If you are using your strip elsewhere, this may be useful. Otherwise, leave it unchecked and all your samples will be strung into a long, unevenly sized chain, but will save the 1232 bytes per extra sample.  If you choose this option, be sure all of the samples are already in your desired format as you probably will not be able to rechop it in the Electribe.
+
+Remove All = Clear out all entries in the table.
+
+Remove = Clear the selected row. 
+
+Squinch = This will also cause the entire table to squinch up and eliminate any blank rows.
+
+Sort = sorts all of the rows in order of size, highest first.  Empty rows cause each clump of samples to be sorted separately.
+
+Finally...
+==========
+Failure = If the program errors out, you may not notice it, but it should create an error.txt file with any pertinent information to pass along. That should handle everything. You can find me on KVR or Gearslutz if you need anything! Enjoy!
