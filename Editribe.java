@@ -383,7 +383,6 @@ public class Editribe extends JFrame
 		{
 			public synchronized void drop(DropTargetDropEvent dtde)
 			{
-				int col = table1.columnAtPoint(dtde.getLocation());
 				int row2 = table1.rowAtPoint(dtde.getLocation());
 				frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 				try
@@ -600,11 +599,9 @@ public class Editribe extends JFrame
 		{
 			public void actionPerformed(ActionEvent ae)
 			{
-				int s;
 				int row2 = getRow();
 				if ((Integer) af.sampleBank[row2].kLooping == 0)
 				{
-					s = 1;
 					af.sampleBank[row2].kLoopStart = af.sampleBank[row2].kSampleSize -
 													 (2 * (af.sampleBank[row2].numChannels + 1));
 					af.sampleBank[row2].kLoopEnd = af.sampleBank[row2].kLoopStart;
@@ -613,7 +610,6 @@ public class Editribe extends JFrame
 				}
 				else
 				{
-					s = 0;
 					af.sampleBank[row2].kLoopStart = 0;
 					af.sampleBank[row2].kLooping = 0;
 					loopButton.setText("Unloop");
@@ -887,7 +883,6 @@ public class Editribe extends JFrame
 		JButton cancelButton = new JButton("Cancel");
 		JButton convertButton = new JButton("Convert");
 		JFileChooser fcSource = new JFileChooser();
-		JFileChooser fcDest = new JFileChooser();
 
 		private Convert()
 		{
@@ -1606,7 +1601,6 @@ public class Editribe extends JFrame
 			mData[o][2] = temp2;
 			mTable.setRowSelectionInterval(n, n);
 		}
-
 	}
 
 	/********************************************************************
@@ -1636,7 +1630,6 @@ public class Editribe extends JFrame
 					frame.setTitle("EdiTribe - " + allFile);
 					raf.seek(88);
 
-					int lastSt = 0;
 					for (int i = 19; i < 1000; i++)
 					{
 						int st = Integer.reverseBytes(raf.readInt());
@@ -1662,8 +1655,6 @@ public class Editribe extends JFrame
 
 		private void writeFile()
 		{
-			byte[] data = null;
-
 			updateChunkStarts();
 			try
 			{
@@ -1939,32 +1930,16 @@ public class Editribe extends JFrame
 
 	public static int playLogPeriod(int plp)
 	{
-		int retVal;
 		switch (plp)
 		{
-		case 11025:
-			retVal = 21880;
-			break;
-		case 16000:
-			retVal = 20229;
-			break;
-		case 22050:
-			retVal = 18808;
-			break;
-		case 32000:
-			retVal = 17157;
-			break;
-		case 44100:
-			retVal = 15736;
-			break;
-		case 48000:
-			retVal = 15360;
-			break;
-		default:
-			retVal = 15736;
-			break;
-		}
-		return retVal;
+		case 11025:	return 21880;
+		case 16000: return 20229;
+		case 22050: return 18808;
+		case 32000: return 17157;
+		case 44100: return 15736;
+		case 48000: return 15360;
+		default:    return 15736;
+	    }	
 	}
 
 	public static void throwError(String message)
