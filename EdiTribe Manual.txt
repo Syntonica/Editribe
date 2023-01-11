@@ -1,4 +1,4 @@
-EdiTribe should work on anything that can run Java 1.8+. It wants Nimbus for its LAF, but will fall back to the system LAF if, for some reason, Nimbus is missing.
+EdiTribe should work on anything that can run Java 1.6+. It wants Nimbus for its LAF, but will fall back to the system LAF if, for some reason, Nimbus is missing.
 
 !!!IMPORTANT!!!
 ===============
